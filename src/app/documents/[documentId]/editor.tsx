@@ -1,6 +1,7 @@
 "use client";
 
 import { useEditorStore } from "@/store/use-editor-store";
+import FontFamily from "@tiptap/extension-font-family";
 import Image from "@tiptap/extension-image";
 import Table from "@tiptap/extension-table";
 import TableCell from "@tiptap/extension-table-cell";
@@ -8,6 +9,7 @@ import TableHeader from "@tiptap/extension-table-header";
 import TableRow from "@tiptap/extension-table-row";
 import TaskItem from "@tiptap/extension-task-item";
 import TaskList from "@tiptap/extension-task-list";
+import TextStyle from "@tiptap/extension-text-style";
 import Underline from "@tiptap/extension-underline";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -47,6 +49,8 @@ export const Editor = () => {
     },
     extensions: [
       StarterKit,
+      TextStyle,
+      FontFamily,
       TaskItem.configure({
         nested: true,
       }),
@@ -74,9 +78,6 @@ export const Editor = () => {
             </tr>
           </tbody>
         </table>
-
-
-        <img src="https://placehold.co/800x400/6A00F5/white" />
       `,
   });
 
