@@ -88,6 +88,18 @@ body {
 }
 
 .tiptap {
+  /* Link styles */
+  a {
+    @apply text-[#6a00f5];
+    /* color: #6a00f5; */
+    cursor: pointer;
+
+    &:hover {
+      @apply underline;
+      color: #5800cc;
+    }
+  }
+
   /* Heading styles */
   h1,
   h2,
