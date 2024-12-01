@@ -1,5 +1,6 @@
 "use client";
 
+import { FontSizeExtension } from "@/extensions/font-size";
 import { useEditorStore } from "@/store/use-editor-store";
 import { Color } from "@tiptap/extension-color";
 import FontFamily from "@tiptap/extension-font-family";
@@ -18,6 +19,7 @@ import Underline from "@tiptap/extension-underline";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import ImageResize from "tiptap-extension-resize-image";
+
 export const Editor = () => {
   // EDITOR STORE
   const { setEditor } = useEditorStore();
@@ -53,6 +55,7 @@ export const Editor = () => {
     },
     extensions: [
       StarterKit,
+      FontSizeExtension,
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
