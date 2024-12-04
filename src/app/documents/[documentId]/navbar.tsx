@@ -11,6 +11,7 @@ import {
   MenubarSubTrigger,
   MenubarTrigger,
 } from "@/components/ui/menubar";
+import { useEditorStore } from "@/store/use-editor-store";
 import {
   BoldIcon,
   FileIcon,
@@ -33,9 +34,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { BsFilePdf } from "react-icons/bs";
 import { DocumentInput } from "./document-input";
+import { TableGenerator } from "./table-generator";
 
+const tableSizes = Array.from({ length: 5 }, (_, i) => i);
 export const Navbar = () => {
-  const tableSizes = Array.from({ length: 5 }, (_, i) => i);
+  const { editor } = useEditorStore();
+
+  const insertTable = ({ rows, cols }: { rows: number; cols: number }) => {
+    editor
+      ?.chain()
+      .focus()
+      .insertTable({ rows, cols, withHeaderRow: false })
+      .run();
+  };
+
   return (
     <nav className="flex items-center justify-between">
       <div className="flex gap-2 items-center">
@@ -101,11 +113,15 @@ export const Navbar = () => {
                   Edit
                 </MenubarTrigger>
                 <MenubarContent>
-                  <MenubarItem>
+                  <MenubarItem
+                    onClick={() => editor?.chain().focus().undo().run()}
+                  >
                     <Undo2Icon className="size-4 mr-2" />
                     Undo <MenubarShortcut>⌘Z</MenubarShortcut>
                   </MenubarItem>
-                  <MenubarItem>
+                  <MenubarItem
+                    onClick={() => editor?.chain().focus().redo().run()}
+                  >
                     <Redo2Icon className="size-4 mr-2" />
                     Redo <MenubarShortcut>⌘⇧Z</MenubarShortcut>
                   </MenubarItem>
@@ -120,13 +136,9 @@ export const Navbar = () => {
                   <MenubarSub>
                     <MenubarSubTrigger>Table</MenubarSubTrigger>
                     <MenubarSubContent>
-                      {tableSizes.map((_, i) => {
-                        return (
-                          <MenubarItem key={i + 2}>
-                            {i + 2} x {i + 2}
-                          </MenubarItem>
-                        );
-                      })}
+                      <MenubarItem className="focus:bg-transparent">
+                        <TableGenerator />
+                      </MenubarItem>
                     </MenubarSubContent>
                   </MenubarSub>
                 </MenubarContent>
