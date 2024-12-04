@@ -83,6 +83,16 @@ export const Navbar = () => {
     onDownload(blob, `document.txt`);
   };
 
+  const onSaveMARKDOWN = () => {
+    if (!editor) return;
+    const content = editor.storage.markdown.getMarkdown();
+
+    const blob = new Blob([content], {
+      type: "text/plain",
+    });
+    onDownload(blob, `document.md`);
+  };
+
   return (
     <nav className="flex items-center justify-between">
       <div className="flex gap-2 items-center">
@@ -119,6 +129,10 @@ export const Navbar = () => {
                       <MenubarItem onClick={onSaveTEXT}>
                         <FileTextIcon className="size-4 mr-2" />
                         TEXT
+                      </MenubarItem>
+                      <MenubarItem onClick={onSaveMARKDOWN}>
+                        <FileTextIcon className="size-4 mr-2" />
+                        MARKDOWN
                       </MenubarItem>
                     </MenubarSubContent>
                   </MenubarSub>
