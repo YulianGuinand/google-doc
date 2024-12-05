@@ -38,6 +38,8 @@ export const CodeEditor = () => {
           content: [{ type: "text", text: value }],
         })
         .run();
+
+      editor?.view.dom.setAttribute("spellcheck", "false");
     }
   };
 

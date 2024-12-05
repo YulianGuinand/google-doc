@@ -185,7 +185,7 @@ export const Navbar = () => {
                       </MenubarSubContent>
                     </MenubarSub>
                     <DialogTrigger className="w-full">
-                      <MenubarItem>Open</MenubarItem>
+                      <MenubarItem>Code</MenubarItem>
                     </DialogTrigger>
                   </MenubarContent>
                 </MenubarMenu>
