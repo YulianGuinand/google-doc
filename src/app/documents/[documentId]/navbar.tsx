@@ -36,17 +36,8 @@ import { BsFilePdf } from "react-icons/bs";
 import { DocumentInput } from "./document-input";
 import { TableGenerator } from "./table-generator";
 
-const tableSizes = Array.from({ length: 5 }, (_, i) => i);
 export const Navbar = () => {
   const { editor } = useEditorStore();
-
-  const insertTable = ({ rows, cols }: { rows: number; cols: number }) => {
-    editor
-      ?.chain()
-      .focus()
-      .insertTable({ rows, cols, withHeaderRow: false })
-      .run();
-  };
 
   const onDownload = (blob: Blob, filename: string) => {
     const url = URL.createObjectURL(blob);
