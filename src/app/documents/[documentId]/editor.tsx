@@ -3,6 +3,7 @@
 import { FontSizeExtension } from "@/extensions/font-size";
 import { LineHeightExtension } from "@/extensions/line-height";
 import { useEditorStore } from "@/store/use-editor-store";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { Color } from "@tiptap/extension-color";
 import FontFamily from "@tiptap/extension-font-family";
 import Highlight from "@tiptap/extension-highlight";
@@ -19,6 +20,7 @@ import TextStyle from "@tiptap/extension-text-style";
 import Underline from "@tiptap/extension-underline";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { all, createLowlight } from "lowlight";
 import ImageResize from "tiptap-extension-resize-image";
 import { Markdown } from "tiptap-markdown";
 import { Ruler } from "./ruler";
@@ -26,6 +28,7 @@ import { Ruler } from "./ruler";
 export const Editor = () => {
   // EDITOR STORE
   const { setEditor } = useEditorStore();
+  const lowlight = createLowlight(all);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -59,6 +62,10 @@ export const Editor = () => {
     },
     extensions: [
       StarterKit,
+      CodeBlockLowlight.configure({
+        lowlight,
+        languageClassPrefix: "language-",
+      }),
       Markdown.configure({
         html: true, // Allow HTML input/output
         tightLists: true, // No <p> inside <li> in markdown output
@@ -95,7 +102,7 @@ export const Editor = () => {
       ImageResize,
       Underline,
     ],
-    content: ``,
+    content: `<p>Coucou</p><pre><code class="language-javascript">const i = 0;</code></pre>`,
   });
 
   return (
