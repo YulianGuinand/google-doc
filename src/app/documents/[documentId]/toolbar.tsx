@@ -27,6 +27,7 @@ import {
   LucideIcon,
   MessageSquarePlusIcon,
   MinusIcon,
+  PencilIcon,
   PlusIcon,
   PrinterIcon,
   Redo2Icon,
@@ -55,9 +56,6 @@ import { SketchPicker, type ColorResult } from "react-color";
 // Ia
 const IaButton = () => {
   const { editor } = useEditorStore();
-  const [message, setMessage] = useState("");
-
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const getSelectedTest = () => {
     if (!editor) return;
@@ -78,7 +76,7 @@ const IaButton = () => {
         },
         body: JSON.stringify({
           data: {
-            prompt: `Reformule plus simplement ceci : ${text}`, // Remplacez par votre prompt dynamique si nécessaire
+            prompt: `Reformule plus simplement et sans retour à la ligne ceci : ${text}`,
           },
         }),
       });
@@ -93,7 +91,11 @@ const IaButton = () => {
             html += new TextDecoder().decode(value);
           }
           if (done) {
-            setMessage(JSON.parse(html).message);
+            const text = JSON.parse(html).message;
+            editor?.commands.insertContent(
+              `<p><span style="color: hsl(var(--primary))">${text}</span></p>`
+            );
+
             return;
           }
         }
@@ -104,27 +106,19 @@ const IaButton = () => {
   };
 
   return (
-    <>
-      <button
-        onClick={() => setIsDialogOpen(true)}
-        className="h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm"
-      >
-        <SparklesIcon className="size-4" />
-      </button>
-
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Get some help from ia</DialogTitle>
-          </DialogHeader>
-          <div>{message}</div>
-          <Button onClick={rephrase}>Rephrase</Button>
-          <DialogFooter>
-            <Button>Help</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className="h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm">
+          <SparklesIcon className="size-4" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem onClick={rephrase}>
+          <PencilIcon className="size-4 mr-2" />
+          Rephrase
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
