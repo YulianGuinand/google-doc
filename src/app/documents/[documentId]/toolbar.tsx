@@ -28,6 +28,7 @@ import {
   LucideIcon,
   MessageSquarePlusIcon,
   MinusIcon,
+  NotebookPenIcon,
   PencilIcon,
   PlusIcon,
   PrinterIcon,
@@ -114,6 +115,12 @@ const IaButton = () => {
     );
   };
 
+  const resume = async () => {
+    const text = getSelectedTest();
+    if (!text) return;
+    sendPrompt(`Résume sans retour à la ligne ceci : ${text}`);
+  };
+
   const translate = async () => {
     const text = getSelectedTest();
     if (!text || language === "") return;
@@ -138,6 +145,10 @@ const IaButton = () => {
           <DropdownMenuItem onClick={() => setIsDialogOpen(true)}>
             <LanguagesIcon className="size-4 mr-2" />
             Translate
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={resume}>
+            <NotebookPenIcon className="size-4 mr-2" />
+            Resume
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
