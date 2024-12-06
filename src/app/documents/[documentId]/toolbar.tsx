@@ -17,6 +17,7 @@ import {
   BoldIcon,
   CheckCheckIcon,
   ChevronDownIcon,
+  GraduationCapIcon,
   HighlighterIcon,
   ImageIcon,
   ItalicIcon,
@@ -26,6 +27,7 @@ import {
   ListIcon,
   ListOrderedIcon,
   ListTodo,
+  LoaderIcon,
   LucideIcon,
   MessageSquarePlusIcon,
   MinusIcon,
@@ -59,6 +61,7 @@ import { SketchPicker, type ColorResult } from "react-color";
 // Ia
 const IaButton = () => {
   const { editor } = useEditorStore();
+  const [loading, setLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [language, setLanguage] = useState("");
 
@@ -72,6 +75,7 @@ const IaButton = () => {
 
   const sendPrompt = async (prompt: string) => {
     try {
+      setLoading(true);
       const res = await fetch("/api/llm-response", {
         method: "POST",
         headers: {
@@ -95,9 +99,17 @@ const IaButton = () => {
           }
           if (done) {
             const text = JSON.parse(html).message;
-            editor?.commands.insertContent(
-              `<p><span style="color: hsl(var(--primary))">${text}</span></p>`
-            );
+            const paragraphs = text
+              .split("\n")
+              .map((para: string) => para.trim())
+              .filter((para: string) => para !== "");
+
+            setLoading(false);
+            paragraphs.forEach((paragraph: string) => {
+              editor?.commands.insertContent(
+                `<span style="color: hsl(var(--primary))">${paragraph}</span><br/>`
+              );
+            });
 
             return;
           }
@@ -108,7 +120,7 @@ const IaButton = () => {
     }
   };
 
-  const rephrase = async () => {
+  const rephrase = () => {
     const text = getSelectedTest();
     if (!text) return;
     sendPrompt(
@@ -116,13 +128,13 @@ const IaButton = () => {
     );
   };
 
-  const resume = async () => {
+  const resume = () => {
     const text = getSelectedTest();
     if (!text) return;
     sendPrompt(`Résume sans retour à la ligne ceci : ${text}`);
   };
 
-  const verify = async () => {
+  const verify = () => {
     const text = getSelectedTest();
     if (!text) return;
     sendPrompt(
@@ -130,11 +142,20 @@ const IaButton = () => {
     );
   };
 
-  const translate = async () => {
+  const translate = () => {
     const text = getSelectedTest();
     if (!text || language === "") return;
     sendPrompt(
       `Traduit en ${language} et sans retour à la ligne ceci : ${text}`
+    );
+    setIsDialogOpen(false);
+  };
+
+  const explain = () => {
+    const text = getSelectedTest();
+    if (!text) return;
+    sendPrompt(
+      `Explique clairement et simplement ceci (avec des espacements si besoin): ${text}`
     );
   };
 
@@ -163,26 +184,37 @@ const IaButton = () => {
             <CheckCheckIcon className="size-4 mr-2" />
             Check
           </DropdownMenuItem>
+          <DropdownMenuItem onClick={explain}>
+            <GraduationCapIcon className="size-4 mr-2" />
+            Explain
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Wich Language ?</DialogTitle>
           </DialogHeader>
 
-          <Input
-            placeholder="English"
-            value={language}
-            onChange={(e) => setLanguage(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                translate();
-              }
-            }}
-          />
+          {loading ? (
+            <LoaderIcon className="size-6 animate-spin text-primary" />
+          ) : (
+            <Input
+              placeholder="English"
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  translate();
+                }
+              }}
+            />
+          )}
           <DialogFooter>
-            <Button onClick={translate}>Insert</Button>
+            <Button disabled={loading} onClick={translate}>
+              Insert
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
