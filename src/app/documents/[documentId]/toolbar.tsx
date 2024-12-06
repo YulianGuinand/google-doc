@@ -15,6 +15,7 @@ import {
   AlignLeftIcon,
   AlignRightIcon,
   BoldIcon,
+  CheckCheckIcon,
   ChevronDownIcon,
   HighlighterIcon,
   ImageIcon,
@@ -121,6 +122,14 @@ const IaButton = () => {
     sendPrompt(`Résume sans retour à la ligne ceci : ${text}`);
   };
 
+  const verify = async () => {
+    const text = getSelectedTest();
+    if (!text) return;
+    sendPrompt(
+      `Corrige les fautes sans retour à la ligne et sans changer les expressions ceci : ${text}`
+    );
+  };
+
   const translate = async () => {
     const text = getSelectedTest();
     if (!text || language === "") return;
@@ -149,6 +158,10 @@ const IaButton = () => {
           <DropdownMenuItem onClick={resume}>
             <NotebookPenIcon className="size-4 mr-2" />
             Resume
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={verify}>
+            <CheckCheckIcon className="size-4 mr-2" />
+            Check
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
