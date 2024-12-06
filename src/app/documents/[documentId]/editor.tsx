@@ -102,7 +102,7 @@ export const Editor = () => {
       ImageResize,
       Underline,
     ],
-    content: `<p>Coucou</p><pre><code class="language-javascript">const i = 0;</code></pre>`,
+    content: ``,
   });
 
   return (

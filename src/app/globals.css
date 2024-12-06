@@ -88,6 +88,10 @@ body {
 }
 
 .tiptap {
+  .ia {
+    color: red;
+  }
+
   /* Link styles */
   a {
     color: hsl(var(--primary));

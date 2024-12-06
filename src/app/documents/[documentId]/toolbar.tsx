@@ -15,23 +15,30 @@ import {
   AlignLeftIcon,
   AlignRightIcon,
   BoldIcon,
+  CheckCheckIcon,
   ChevronDownIcon,
+  GraduationCapIcon,
   HighlighterIcon,
   ImageIcon,
   ItalicIcon,
+  LanguagesIcon,
   Link2Icon,
   ListCollapseIcon,
   ListIcon,
   ListOrderedIcon,
   ListTodo,
+  LoaderIcon,
   LucideIcon,
   MessageSquarePlusIcon,
   MinusIcon,
+  NotebookPenIcon,
+  PencilIcon,
   PlusIcon,
   PrinterIcon,
   Redo2Icon,
   RemoveFormattingIcon,
   SearchIcon,
+  SparklesIcon,
   SpellCheckIcon,
   UnderlineIcon,
   Undo2Icon,
@@ -50,6 +57,170 @@ import { Input } from "@/components/ui/input";
 import { type Level } from "@tiptap/extension-heading";
 import { useState } from "react";
 import { SketchPicker, type ColorResult } from "react-color";
+
+// Ia
+const IaButton = () => {
+  const { editor } = useEditorStore();
+  const [loading, setLoading] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [language, setLanguage] = useState("");
+
+  const getSelectedTest = () => {
+    if (!editor) return;
+    const { view, state } = editor;
+    const { from, to } = view.state.selection;
+    const text = state.doc.textBetween(from, to, "");
+    return text;
+  };
+
+  const sendPrompt = async (prompt: string) => {
+    try {
+      setLoading(true);
+      const res = await fetch("/api/llm-response", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data: {
+            prompt,
+          },
+        }),
+      });
+
+      if (res.ok) {
+        const reader = res.body?.getReader();
+        if (!reader) return;
+        let html = "";
+        while (true) {
+          const { value, done } = await reader.read();
+          if (value) {
+            html += new TextDecoder().decode(value);
+          }
+          if (done) {
+            const text = JSON.parse(html).message;
+            const paragraphs = text
+              .split("\n")
+              .map((para: string) => para.trim())
+              .filter((para: string) => para !== "");
+
+            setLoading(false);
+            paragraphs.forEach((paragraph: string) => {
+              editor?.commands.insertContent(
+                `<span style="color: hsl(var(--primary))">${paragraph}</span><br/>`
+              );
+            });
+
+            return;
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Erreur :", error);
+    }
+  };
+
+  const rephrase = () => {
+    const text = getSelectedTest();
+    if (!text) return;
+    sendPrompt(
+      `Reformule plus simplement et sans retour à la ligne ceci : ${text}`
+    );
+  };
+
+  const resume = () => {
+    const text = getSelectedTest();
+    if (!text) return;
+    sendPrompt(`Résume sans retour à la ligne ceci : ${text}`);
+  };
+
+  const verify = () => {
+    const text = getSelectedTest();
+    if (!text) return;
+    sendPrompt(
+      `Corrige les fautes sans retour à la ligne et sans changer les expressions ceci : ${text}`
+    );
+  };
+
+  const translate = () => {
+    const text = getSelectedTest();
+    if (!text || language === "") return;
+    sendPrompt(
+      `Traduit en ${language} et sans retour à la ligne ceci : ${text}`
+    );
+    setIsDialogOpen(false);
+  };
+
+  const explain = () => {
+    const text = getSelectedTest();
+    if (!text) return;
+    sendPrompt(
+      `Explique clairement et simplement ceci (avec des espacements si besoin): ${text}`
+    );
+  };
+
+  return (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button className="h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm">
+            <SparklesIcon className="size-4" />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem onClick={rephrase}>
+            <PencilIcon className="size-4 mr-2" />
+            Rephrase
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setIsDialogOpen(true)}>
+            <LanguagesIcon className="size-4 mr-2" />
+            Translate
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={resume}>
+            <NotebookPenIcon className="size-4 mr-2" />
+            Resume
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={verify}>
+            <CheckCheckIcon className="size-4 mr-2" />
+            Check
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={explain}>
+            <GraduationCapIcon className="size-4 mr-2" />
+            Explain
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Wich Language ?</DialogTitle>
+          </DialogHeader>
+
+          {loading ? (
+            <LoaderIcon className="size-6 animate-spin text-primary" />
+          ) : (
+            <Input
+              placeholder="English"
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  translate();
+                }
+              }}
+            />
+          )}
+          <DialogFooter>
+            <Button disabled={loading} onClick={translate}>
+              Insert
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+};
 
 // LINE HEIGHT
 const LineHeightButton = () => {
@@ -738,6 +909,7 @@ export const Toolbar = () => {
       {sections[2].map((item) => (
         <ToolbarButton key={item.label} {...item} />
       ))}
+      <IaButton />
     </div>
   );
 };
