@@ -102,7 +102,7 @@ export const Editor = () => {
       ImageResize,
       Underline,
     ],
-    content: `<p>Next.js est un framework JavaScript basé sur React, conçu pour créer des applications web performantes et optimisées. Il offre des fonctionnalités clés comme le rendu côté serveur (SSR), le rendu statique (SSG) et le support des API intégrées, permettant de construire des sites web rapides et évolutifs. Grâce à sa simplicité et sa flexibilité, il est devenu un choix populaire pour les développeurs souhaitant créer des projets modernes et efficaces.</p><pre><code class="language-javascript">const i = 0;</code></pre>`,
+    content: ``,
   });
 
   return (
