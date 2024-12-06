@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -8,6 +9,7 @@ import {
 } from "@/components/ui/table";
 import { PaginationStatus } from "convex/react";
 import { LoaderIcon } from "lucide-react";
+import { useState } from "react";
 import { Doc } from "../../../convex/_generated/dataModel";
 import { DocumentRow } from "./document-row";
 
@@ -22,6 +24,14 @@ export const DocumentsTable = ({
   loadMore,
   status,
 }: DocumentsTableProps) => {
+  const [loading, setIsLoading] = useState(false);
+
+  const handleLoad = () => {
+    setIsLoading(true);
+    loadMore(5);
+    setIsLoading(false);
+  };
+
   return (
     <div className="max-w-screen-xl mx-auto px-16 py-6 flex flex-col gap-5">
       {documents === undefined ? (
@@ -58,6 +68,20 @@ export const DocumentsTable = ({
           )}
         </Table>
       )}
+      <div className="flex items-center justify-center">
+        {loading ? (
+          <LoaderIcon className="size-6 animate-spin" />
+        ) : (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => handleLoad()}
+            disabled={status !== "CanLoadMore"}
+          >
+            {status === "CanLoadMore" ? "Load more" : "No more documents"}
+          </Button>
+        )}
+      </div>
     </div>
   );
 };
