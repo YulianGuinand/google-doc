@@ -32,6 +32,7 @@ import {
   Redo2Icon,
   RemoveFormattingIcon,
   SearchIcon,
+  SparklesIcon,
   SpellCheckIcon,
   UnderlineIcon,
   Undo2Icon,
@@ -50,6 +51,82 @@ import { Input } from "@/components/ui/input";
 import { type Level } from "@tiptap/extension-heading";
 import { useState } from "react";
 import { SketchPicker, type ColorResult } from "react-color";
+
+// Ia
+const IaButton = () => {
+  const { editor } = useEditorStore();
+  const [message, setMessage] = useState("");
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const getSelectedTest = () => {
+    if (!editor) return;
+    const { view, state } = editor;
+    const { from, to } = view.state.selection;
+    const text = state.doc.textBetween(from, to, "");
+    return text;
+  };
+
+  const rephrase = async () => {
+    const text = getSelectedTest();
+    if (!text) return;
+    try {
+      const res = await fetch("/api/llm-response", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          data: {
+            prompt: `Reformule plus simplement ceci : ${text}`, // Remplacez par votre prompt dynamique si nécessaire
+          },
+        }),
+      });
+
+      if (res.ok) {
+        const reader = res.body?.getReader();
+        if (!reader) return;
+        let html = "";
+        while (true) {
+          const { value, done } = await reader.read();
+          if (value) {
+            html += new TextDecoder().decode(value);
+          }
+          if (done) {
+            setMessage(JSON.parse(html).message);
+            return;
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Erreur :", error);
+    }
+  };
+
+  return (
+    <>
+      <button
+        onClick={() => setIsDialogOpen(true)}
+        className="h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm"
+      >
+        <SparklesIcon className="size-4" />
+      </button>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Get some help from ia</DialogTitle>
+          </DialogHeader>
+          <div>{message}</div>
+          <Button onClick={rephrase}>Rephrase</Button>
+          <DialogFooter>
+            <Button>Help</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+};
 
 // LINE HEIGHT
 const LineHeightButton = () => {
@@ -738,6 +815,7 @@ export const Toolbar = () => {
       {sections[2].map((item) => (
         <ToolbarButton key={item.label} {...item} />
       ))}
+      <IaButton />
     </div>
   );
 };

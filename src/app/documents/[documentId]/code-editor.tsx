@@ -1,10 +1,11 @@
+import { Button } from "@/components/ui/button";
 import {
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -120,14 +121,16 @@ export const CodeEditor = () => {
             className="rounded-sm overflow-hidden"
           />
         </div>
+      </div>
 
+      <DialogFooter>
         <Button
           disabled={value.replaceAll(" ", "") === ""}
           onClick={handleInsert}
         >
           Insert
         </Button>
-      </div>
+      </DialogFooter>
     </DialogContent>
   );
 };
