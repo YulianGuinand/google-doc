@@ -22,7 +22,9 @@ export async function POST(req: Request) {
   if (!document) return new Response("Document not found...", { status: 404 });
 
   const isOwner = document.ownerId === user.id;
-  const isOrganizationMember = document.organizationId === sessionClaims.org_id;
+  const isOrganizationMember = !!(
+    document.organizationId && document.organizationId === sessionClaims.org_id
+  );
 
   if (!isOwner && !isOrganizationMember)
     return new Response("Unauthorized", { status: 401 });
