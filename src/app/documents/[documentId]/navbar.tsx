@@ -38,6 +38,7 @@ import { BsFilePdf } from "react-icons/bs";
 import { Avatars } from "./avatars";
 import { CodeEditor } from "./code-editor";
 import { DocumentInput } from "./document-input";
+import { Inbox } from "./inbox";
 import { TableGenerator } from "./table-generator";
 
 export const Navbar = () => {
@@ -256,6 +257,7 @@ export const Navbar = () => {
       </div>
       <div className="flex gap-3 items-center pl-6">
         <Avatars />
+        <Inbox />
         <OrganizationSwitcher
           afterCreateOrganizationUrl="/"
           afterLeaveOrganizationUrl="/"
