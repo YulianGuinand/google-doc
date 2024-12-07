@@ -3,6 +3,7 @@
 import { FontSizeExtension } from "@/extensions/font-size";
 import { LineHeightExtension } from "@/extensions/line-height";
 import { useEditorStore } from "@/store/use-editor-store";
+import { useLiveblocksExtension } from "@liveblocks/react-tiptap";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { Color } from "@tiptap/extension-color";
 import FontFamily from "@tiptap/extension-font-family";
@@ -24,8 +25,10 @@ import { all, createLowlight } from "lowlight";
 import ImageResize from "tiptap-extension-resize-image";
 import { Markdown } from "tiptap-markdown";
 import { Ruler } from "./ruler";
+import { Threads } from "./threads";
 
 export const Editor = () => {
+  const liveblocks = useLiveblocksExtension();
   // EDITOR STORE
   const { setEditor } = useEditorStore();
   const lowlight = createLowlight(all);
@@ -61,7 +64,10 @@ export const Editor = () => {
       },
     },
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        history: false,
+      }),
+      liveblocks,
       CodeBlockLowlight.configure({
         lowlight,
         languageClassPrefix: "language-",
@@ -110,6 +116,7 @@ export const Editor = () => {
       <Ruler />
       <div className="min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0">
         <EditorContent editor={editor} />
+        <Threads editor={editor} />
       </div>
     </div>
   );
