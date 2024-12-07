@@ -13,6 +13,7 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import { useEditorStore } from "@/store/use-editor-store";
+import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import {
   BoldIcon,
   FileIcon,
@@ -34,6 +35,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { BsFilePdf } from "react-icons/bs";
+import { Avatars } from "./avatars";
 import { CodeEditor } from "./code-editor";
 import { DocumentInput } from "./document-input";
 import { TableGenerator } from "./table-generator";
@@ -251,6 +253,16 @@ export const Navbar = () => {
             </Dialog>
           </div>
         </div>
+      </div>
+      <div className="flex gap-3 items-center pl-6">
+        <Avatars />
+        <OrganizationSwitcher
+          afterCreateOrganizationUrl="/"
+          afterLeaveOrganizationUrl="/"
+          afterSelectOrganizationUrl="/"
+          afterSelectPersonalUrl="/"
+        />
+        <UserButton />
       </div>
     </nav>
   );
