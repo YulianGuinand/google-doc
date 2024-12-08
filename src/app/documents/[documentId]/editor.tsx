@@ -28,11 +28,15 @@ import { Markdown } from "tiptap-markdown";
 import { Ruler } from "./ruler";
 import { Threads } from "./threads";
 
-export const Editor = () => {
+interface EditorProps {
+  initialContent?: string | undefined;
+}
+
+export const Editor = ({ initialContent }: EditorProps) => {
   const leftMargin = useStorage((root) => root.leftMargin);
   const rightMargin = useStorage((root) => root.rightMargin);
 
-  const liveblocks = useLiveblocksExtension();
+  const liveblocks = useLiveblocksExtension({ initialContent });
 
   // EDITOR STORE
   const { setEditor } = useEditorStore();
@@ -78,14 +82,14 @@ export const Editor = () => {
         languageClassPrefix: "language-",
       }),
       Markdown.configure({
-        html: true, // Allow HTML input/output
-        tightLists: true, // No <p> inside <li> in markdown output
-        tightListClass: "tight", // Add class to <ul> allowing you to remove <p> margins when tight
-        bulletListMarker: "-", // <li> prefix in markdown output
-        linkify: true, // Create links from "https://..." text
-        breaks: true, // New lines (\n) in markdown input are converted to <br>
-        transformPastedText: false, // Allow to paste markdown text in the editor
-        transformCopiedText: false, // Copied text is transformed to markdown
+        html: true,
+        tightLists: true,
+        tightListClass: "tight",
+        bulletListMarker: "-",
+        linkify: true,
+        breaks: true,
+        transformPastedText: false,
+        transformCopiedText: false,
       }),
       LineHeightExtension,
       FontSizeExtension,
