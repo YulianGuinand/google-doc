@@ -35,13 +35,18 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { BsFilePdf } from "react-icons/bs";
+import { Doc } from "../../../../convex/_generated/dataModel";
 import { Avatars } from "./avatars";
 import { CodeEditor } from "./code-editor";
 import { DocumentInput } from "./document-input";
 import { Inbox } from "./inbox";
 import { TableGenerator } from "./table-generator";
 
-export const Navbar = () => {
+interface NavbarProps {
+  data: Doc<"documents">;
+}
+
+export const Navbar = ({ data }: NavbarProps) => {
   const { editor } = useEditorStore();
 
   const onDownload = (blob: Blob, filename: string) => {
@@ -58,7 +63,7 @@ export const Navbar = () => {
     const blob = new Blob([JSON.stringify(content)], {
       type: "application/json",
     });
-    onDownload(blob, `document.json`);
+    onDownload(blob, `${data.title}.json`);
   };
 
   const onSaveHTML = () => {
@@ -67,7 +72,7 @@ export const Navbar = () => {
     const blob = new Blob([content], {
       type: "text/html",
     });
-    onDownload(blob, `document.html`);
+    onDownload(blob, `${data.title}.html`);
   };
 
   const onSaveTEXT = () => {
@@ -76,7 +81,7 @@ export const Navbar = () => {
     const blob = new Blob([content], {
       type: "text/plain",
     });
-    onDownload(blob, `document.txt`);
+    onDownload(blob, `${data.title}.txt`);
   };
 
   const onSaveMARKDOWN = () => {
@@ -86,7 +91,7 @@ export const Navbar = () => {
     const blob = new Blob([content], {
       type: "text/plain",
     });
-    onDownload(blob, `document.md`);
+    onDownload(blob, `${data.title}.md`);
   };
 
   return (
@@ -96,7 +101,7 @@ export const Navbar = () => {
           <Image src="/logo.svg" alt="logo svg" width={36} height={36} />
         </Link>
         <div className="flex flex-col">
-          <DocumentInput />
+          <DocumentInput title={data.title} id={data._id} />
           <div className="flex ">
             <Dialog>
               <Menubar className="border-none bg-transparent shadow-none h-auto p-0">
