@@ -1,0 +1,11 @@
+# Deployment used by `npx convex dev`
+CONVEX_DEPLOYMENT=dev:marvelous-ibis-542 # team: yulian, project: docs-dae4b
+
+NEXT_PUBLIC_CONVEX_URL=https://marvelous-ibis-542.convex.cloud
+
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_Z3JlYXQtZG9nZmlzaC03NC5jbGVyay5hY2NvdW50cy5kZXYk
+CLERK_SECRET_KEY=sk_test_O8OXzSypydirrucuPOo7IM9Qxr3nDPHryWgt7r6qO7
+
+GROQ_API_KEY=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
+
+LIVEBLOCKS_SECRET_KEY=sk_dev_5Oepqkjruyj1F8ik9oNpaXQOtuktyyZcO92aBS7-fwqmVsCcU4LjCPAXv2tnA1UV
