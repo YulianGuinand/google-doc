@@ -41,10 +41,10 @@ export const RenameDialog = ({
     setIsUpdating(true);
 
     update({ id: documentId, title: title.trim() || "Untitled" })
-      .catch(() => toast.error("Something went wrong..."))
       .then(() => {
         setOpen(false);
       })
+      .catch(() => toast.error("Something went wrong..."))
       .finally(() => {
         setIsUpdating(false);
       });
