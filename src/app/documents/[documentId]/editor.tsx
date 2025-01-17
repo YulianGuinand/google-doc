@@ -4,7 +4,6 @@ import { FontSizeExtension } from "@/extensions/font-size";
 import { LineHeightExtension } from "@/extensions/line-height";
 import { useEditorStore } from "@/store/use-editor-store";
 import { useStorage } from "@liveblocks/react";
-import { useLiveblocksExtension } from "@liveblocks/react-tiptap";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { Color } from "@tiptap/extension-color";
 import FontFamily from "@tiptap/extension-font-family";
@@ -23,23 +22,25 @@ import Underline from "@tiptap/extension-underline";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { all, createLowlight } from "lowlight";
+import { useState } from "react";
 import ImageResize from "tiptap-extension-resize-image";
 import { Markdown } from "tiptap-markdown";
-import { Ruler } from "./ruler";
 import { Threads } from "./threads";
 
 interface EditorProps {
-  initialContent?: string | undefined;
+  liveblocks: any;
+  addNewPage: () => void;
+  focusEditor: () => void;
 }
 
-export const Editor = ({ initialContent }: EditorProps) => {
+export const Editor = ({
+  liveblocks,
+  addNewPage,
+  focusEditor,
+}: EditorProps) => {
+  const [lastLine, setLastLine] = useState<boolean | undefined>();
   const leftMargin = useStorage((root) => root.leftMargin);
   const rightMargin = useStorage((root) => root.rightMargin);
-
-  const liveblocks = useLiveblocksExtension({
-    initialContent,
-    offlineSupport_experimental: true,
-  });
 
   // EDITOR STORE
   const { setEditor } = useEditorStore();
@@ -55,6 +56,18 @@ export const Editor = ({ initialContent }: EditorProps) => {
     },
     onUpdate({ editor }) {
       setEditor(editor);
+      const editorElement: HTMLElement | null =
+        document.querySelector(".ProseMirror"); // Sélecteur de l'éditeur
+      if (editorElement) {
+        const totalHeight = editorElement.offsetHeight; // Hauteur totale de l'éditeur
+        const lineHeight = parseFloat(
+          getComputedStyle(editorElement).lineHeight
+        ); // Hauteur d'une ligne
+        const numLines = Math.floor(totalHeight / lineHeight); // Nombre de lignes
+        if (numLines >= 43) {
+          setLastLine(true);
+        } else setLastLine(false);
+      }
     },
     onSelectionUpdate({ editor }) {
       setEditor(editor);
@@ -72,7 +85,17 @@ export const Editor = ({ initialContent }: EditorProps) => {
       attributes: {
         style: `padding-left: ${leftMargin ?? 56}px; padding-right: ${rightMargin ?? 56}px;`,
         class:
-          "focus:outline-none print:border-0 bg-white border border-[#C7C7C7] flex flex-col min-h-[1054px] w-[816px] pt-10 pr-14 pb-10 cursor-text",
+          "focus:outline-none print:border-0 max-h-[1054px] flex flex-col w-[816px] pt-10 pr-14 pb-10 cursor-text",
+      },
+      handleKeyDown(view, event) {
+        if (event.key === "Enter" && lastLine) {
+          event.preventDefault();
+
+          addNewPage();
+          return true;
+        }
+
+        return false;
       },
     },
     extensions: [
@@ -123,13 +146,18 @@ export const Editor = ({ initialContent }: EditorProps) => {
     content: ``,
   });
 
+  const onPageClick = () => {
+    editor?.chain().focus().run();
+    focusEditor();
+  };
+
   return (
-    <div className="size-full overflow-x-auto bg-[#F9FBFD] px-4 print:p-0 print:bg-white print:overflow-visible">
-      <Ruler />
-      <div className="min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0">
-        <EditorContent editor={editor} />
-        <Threads editor={editor} />
-      </div>
+    <div
+      className="bg-white border border-[#C7C7C7] min-h-[1054px]"
+      onClick={onPageClick}
+    >
+      <EditorContent editor={editor} />
+      <Threads editor={editor} />
     </div>
   );
 };
