@@ -39,7 +39,7 @@ export const Editor = ({ initialContent }: EditorProps) => {
 
   // Utiliser `useMemo` pour calculer les correspondances initiales
   const initialPages = useMemo(() => {
-    const matches = initialContent?.match(/data-type="space"/g) || [];
+    const matches = initialContent?.match('data-type="space"') || [];
     return Array(matches.length).fill(""); // Tableau de chaînes vides
   }, [initialContent]);
 
@@ -76,7 +76,7 @@ export const Editor = ({ initialContent }: EditorProps) => {
 
       const nbPages = nbLine ? Math.floor(nbLine / 58) : 0;
 
-      if (nbPages < pages.length) {
+      if (nbPages < addedPages.length) {
         setAddedPages((prevPages) => prevPages.slice(0, nbPages));
       }
 
