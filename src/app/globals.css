@@ -332,6 +332,16 @@ body {
     }
   }
 }
+div[data-type="space"] {
+  height: 80px;
+  background: red;
+}
+
+@media print {
+  div[data-type="space"] {
+    height: 0px;
+  }
+}
 
 /* For mobile */
 .floating-threads {

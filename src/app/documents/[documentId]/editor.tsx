@@ -2,8 +2,10 @@
 
 import { FontSizeExtension } from "@/extensions/font-size";
 import { LineHeightExtension } from "@/extensions/line-height";
+import { SpaceNode } from "@/extensions/space";
 import { useEditorStore } from "@/store/use-editor-store";
 import { useStorage } from "@liveblocks/react";
+import { useLiveblocksExtension } from "@liveblocks/react-tiptap";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { Color } from "@tiptap/extension-color";
 import FontFamily from "@tiptap/extension-font-family";
@@ -25,26 +27,27 @@ import { all, createLowlight } from "lowlight";
 import { useState } from "react";
 import ImageResize from "tiptap-extension-resize-image";
 import { Markdown } from "tiptap-markdown";
+import { Ruler } from "./ruler";
 import { Threads } from "./threads";
 
 interface EditorProps {
-  liveblocks: any;
-  addNewPage: () => void;
-  focusEditor: () => void;
+  initialContent?: string | undefined;
 }
 
-export const Editor = ({
-  liveblocks,
-  addNewPage,
-  focusEditor,
-}: EditorProps) => {
-  const [lastLine, setLastLine] = useState<boolean | undefined>();
+export const Editor = ({ initialContent }: EditorProps) => {
+  const [nbLine, setNbLine] = useState<number | undefined>();
+  const [pages, setPages] = useState<string[]>([]);
   const leftMargin = useStorage((root) => root.leftMargin);
   const rightMargin = useStorage((root) => root.rightMargin);
 
   // EDITOR STORE
   const { setEditor } = useEditorStore();
   const lowlight = createLowlight(all);
+
+  const liveblocks = useLiveblocksExtension({
+    initialContent, // Synchroniser uniquement la page active
+    offlineSupport_experimental: true,
+  });
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -56,17 +59,21 @@ export const Editor = ({
     },
     onUpdate({ editor }) {
       setEditor(editor);
+
+      const nbPages = nbLine ? Math.floor(nbLine / 58) : 0;
+
+      if (nbPages < pages.length) {
+        setPages((prevPages) => prevPages.slice(0, nbPages));
+      }
+
       const editorElement: HTMLElement | null =
-        document.querySelector(".ProseMirror"); // Sélecteur de l'éditeur
+        document.querySelector(".ProseMirror");
       if (editorElement) {
-        const totalHeight = editorElement.offsetHeight; // Hauteur totale de l'éditeur
-        const lineHeight = parseFloat(
-          getComputedStyle(editorElement).lineHeight
-        ); // Hauteur d'une ligne
-        const numLines = Math.floor(totalHeight / lineHeight); // Nombre de lignes
-        if (numLines >= 43) {
-          setLastLine(true);
-        } else setLastLine(false);
+        const totalHeight = editorElement.offsetHeight;
+        const lineHeight = 20;
+        const numLines =
+          Math.floor(totalHeight / lineHeight) - 5 * pages.length;
+        setNbLine(numLines);
       }
     },
     onSelectionUpdate({ editor }) {
@@ -85,13 +92,17 @@ export const Editor = ({
       attributes: {
         style: `padding-left: ${leftMargin ?? 56}px; padding-right: ${rightMargin ?? 56}px;`,
         class:
-          "focus:outline-none print:border-0 max-h-[1054px] flex flex-col w-[816px] pt-10 pr-14 pb-10 cursor-text",
+          "focus:outline-none print:border-0 flex flex-col w-[816px] pr-14 cursor-text",
       },
       handleKeyDown(view, event) {
-        if (event.key === "Enter" && lastLine) {
-          event.preventDefault();
+        if (
+          event.key === "Enter" &&
+          nbLine !== undefined &&
+          nbLine % 58 === 0
+        ) {
+          editor?.commands.insertSpace();
+          setPages([...pages, ""]);
 
-          addNewPage();
           return true;
         }
 
@@ -102,6 +113,7 @@ export const Editor = ({
       StarterKit.configure({
         history: false,
       }),
+      SpaceNode,
       liveblocks,
       CodeBlockLowlight.configure({
         lowlight,
@@ -147,17 +159,30 @@ export const Editor = ({
   });
 
   const onPageClick = () => {
-    editor?.chain().focus().run();
-    focusEditor();
+    editor?.chain().focus();
   };
 
   return (
-    <div
-      className="bg-white border border-[#C7C7C7] min-h-[1054px]"
-      onClick={onPageClick}
-    >
-      <EditorContent editor={editor} />
-      <Threads editor={editor} />
+    <div className="size-full overflow-x-auto bg-[#F9FBFD] px-4 print:p-0 print:bg-white print:overflow-visible">
+      <Ruler />
+      <div className="min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0 flex-col gap-5">
+        <div
+          className="bg-white border print:border-0 border-[#C7C7C7] min-h-[1240px] max-h-[1240px]"
+          onClick={onPageClick}
+        >
+          <div className="pt-10 print:pt-0">
+            <EditorContent editor={editor} />
+          </div>
+          <Threads editor={editor} />
+        </div>
+        {pages.map((_, index) => (
+          <div
+            className="bg-white border print:border-0 border-[#C7C7C7] min-h-[1240px] max-h-[1240px]"
+            onClick={onPageClick}
+            key={index}
+          />
+        ))}
+      </div>
     </div>
   );
 };
