@@ -24,19 +24,31 @@ import Underline from "@tiptap/extension-underline";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { all, createLowlight } from "lowlight";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import ImageResize from "tiptap-extension-resize-image";
 import { Markdown } from "tiptap-markdown";
 import { Ruler } from "./ruler";
 import { Threads } from "./threads";
 
 interface EditorProps {
-  initialContent?: string | undefined;
+  initialContent: string | undefined;
 }
 
 export const Editor = ({ initialContent }: EditorProps) => {
   const [nbLine, setNbLine] = useState<number | undefined>();
-  const [pages, setPages] = useState<string[]>([]);
+
+  // Utiliser `useMemo` pour calculer les correspondances initiales
+  const initialPages = useMemo(() => {
+    const matches = initialContent?.match(/data-type="space"/g) || [];
+    return Array(matches.length).fill(""); // Tableau de chaînes vides
+  }, [initialContent]);
+
+  // État pour les pages ajoutées dynamiquement
+  const [addedPages, setAddedPages] = useState<string[]>([]);
+
+  // Fusionner les pages initiales et les pages ajoutées
+  const pages = [...initialPages, ...addedPages];
+
   const leftMargin = useStorage((root) => root.leftMargin);
   const rightMargin = useStorage((root) => root.rightMargin);
 
@@ -60,10 +72,12 @@ export const Editor = ({ initialContent }: EditorProps) => {
     onUpdate({ editor }) {
       setEditor(editor);
 
+      console.log(nbLine);
+
       const nbPages = nbLine ? Math.floor(nbLine / 58) : 0;
 
       if (nbPages < pages.length) {
-        setPages((prevPages) => prevPages.slice(0, nbPages));
+        setAddedPages((prevPages) => prevPages.slice(0, nbPages));
       }
 
       const editorElement: HTMLElement | null =
@@ -101,7 +115,7 @@ export const Editor = ({ initialContent }: EditorProps) => {
           nbLine % 58 === 0
         ) {
           editor?.commands.insertSpace();
-          setPages([...pages, ""]);
+          setAddedPages([...pages, ""]);
 
           return true;
         }

@@ -24,7 +24,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <NuqsAdapter>
           <ConvexClientProvider>
-            <Toaster />
+            <Toaster className="print:hidden" />
             {children}
           </ConvexClientProvider>
         </NuqsAdapter>
