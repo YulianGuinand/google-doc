@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { FontSizeExtension } from "@/extensions/font-size";
 import { LineHeightExtension } from "@/extensions/line-height";
 import { SpaceNode } from "@/extensions/space";
@@ -24,6 +25,7 @@ import Underline from "@tiptap/extension-underline";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { all, createLowlight } from "lowlight";
+import { PlusCircleIcon, Trash2Icon } from "lucide-react";
 import { useMemo, useState } from "react";
 import ImageResize from "tiptap-extension-resize-image";
 import { Markdown } from "tiptap-markdown";
@@ -35,7 +37,7 @@ interface EditorProps {
 }
 
 export const Editor = ({ initialContent }: EditorProps) => {
-  const [nbLine, setNbLine] = useState<number | undefined>();
+  const [nbLine, setNbLine] = useState<number>(0);
 
   // Utiliser `useMemo` pour calculer les correspondances initiales
   const initialPages = useMemo(() => {
@@ -72,22 +74,11 @@ export const Editor = ({ initialContent }: EditorProps) => {
     onUpdate({ editor }) {
       setEditor(editor);
 
-      console.log(nbLine);
-
-      const nbPages = nbLine ? Math.floor(nbLine / 58) : 0;
-
-      if (nbPages < addedPages.length) {
-        setAddedPages((prevPages) => prevPages.slice(0, nbPages));
-      }
-
       const editorElement: HTMLElement | null =
         document.querySelector(".ProseMirror");
       if (editorElement) {
         const totalHeight = editorElement.offsetHeight;
-        const lineHeight = 20;
-        const numLines =
-          Math.floor(totalHeight / lineHeight) - 5 * pages.length;
-        setNbLine(numLines);
+        setNbLine(totalHeight);
       }
     },
     onSelectionUpdate({ editor }) {
@@ -111,11 +102,9 @@ export const Editor = ({ initialContent }: EditorProps) => {
       handleKeyDown(view, event) {
         if (
           event.key === "Enter" &&
-          nbLine !== undefined &&
-          nbLine % 58 === 0
+          (nbLine - 100 * pages.length) % 1180 === 0
         ) {
-          editor?.commands.insertSpace();
-          setAddedPages([...pages, ""]);
+          event.preventDefault();
 
           return true;
         }
@@ -170,10 +159,29 @@ export const Editor = ({ initialContent }: EditorProps) => {
       Underline,
     ],
     content: ``,
+    parseOptions: {
+      preserveWhitespace: "full",
+    },
   });
 
   const onPageClick = () => {
     editor?.chain().focus();
+  };
+
+  const addPage = () => {
+    if (!editor) return;
+    editor.commands.insertContentAt(
+      editor.state.doc.content.size, // Position de fin du document
+      {
+        type: "space",
+      }
+    );
+
+    setAddedPages([...pages, ""]);
+  };
+
+  const removePage = () => {
+    setAddedPages((prevPages) => prevPages.slice(0, -1));
   };
 
   return (
@@ -181,21 +189,32 @@ export const Editor = ({ initialContent }: EditorProps) => {
       <Ruler />
       <div className="min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0 flex-col gap-5">
         <div
-          className="bg-white border print:border-0 border-[#C7C7C7] min-h-[1240px] max-h-[1240px]"
+          className="bg-white border print:border-0 border-[#C7C7C7] min-h-[1260px] max-h-[1260px] z-10"
           onClick={onPageClick}
         >
           <div className="pt-10 print:pt-0">
             <EditorContent editor={editor} />
           </div>
-          <Threads editor={editor} />
         </div>
         {pages.map((_, index) => (
           <div
-            className="bg-white border print:border-0 border-[#C7C7C7] min-h-[1240px] max-h-[1240px]"
+            className="bg-white border print:border-0 border-[#C7C7C7] min-h-[1260px] max-h-[1260px] relative group z-0"
             onClick={onPageClick}
             key={index}
-          />
+          >
+            <div
+              className="absolute hidden group-hover:block print:hidden right-4 top-4 p-1 bg-primary/5 rounded-full cursor-pointer "
+              onClick={removePage}
+            >
+              <Trash2Icon className="size-4 text-primary/70" />
+            </div>
+          </div>
         ))}
+        <Threads editor={editor} />
+        <Button variant="ghost" onClick={addPage} className="print:hidden">
+          <PlusCircleIcon className="size-4" />
+          Add a Page
+        </Button>
       </div>
     </div>
   );

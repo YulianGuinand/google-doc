@@ -52,10 +52,10 @@ export const SpaceNode = Node.create({
         ({ commands }) => {
           return commands.insertContent([
             {
-              type: this.name,
+              type: "paragraph",
             },
             {
-              type: "paragraph",
+              type: this.name,
             },
           ]);
         },

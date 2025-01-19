@@ -51,6 +51,8 @@ export const templates = [
 </ul>
 </li>
 </ol>
+<p></p>
+<div data-type="space" contenteditable="false" style="pointer-events: none;"></div>
 <h2 id="-ch-ancier">Échéancier</h2>
 <table>
 <thead>
