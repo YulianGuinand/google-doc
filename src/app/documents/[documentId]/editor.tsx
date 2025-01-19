@@ -102,7 +102,7 @@ export const Editor = ({ initialContent }: EditorProps) => {
       handleKeyDown(view, event) {
         if (
           event.key === "Enter" &&
-          (nbLine - 100 * pages.length) % 1180 === 0
+          Math.floor((nbLine + 20) / 1200) > pages.length
         ) {
           event.preventDefault();
 
@@ -170,12 +170,17 @@ export const Editor = ({ initialContent }: EditorProps) => {
 
   const addPage = () => {
     if (!editor) return;
-    editor.commands.insertContentAt(
-      editor.state.doc.content.size, // Position de fin du document
-      {
+
+    if (Math.floor((nbLine + 20) / 1200) > addedPages.length) {
+      const space = 1200 - (nbLine % 1200);
+      console.log(space);
+      editor.commands.insertContentAt(editor.state.doc.content.size, {
         type: "space",
-      }
-    );
+        attrs: {
+          height: 100 + space,
+        },
+      });
+    }
 
     setAddedPages([...pages, ""]);
   };
@@ -189,7 +194,7 @@ export const Editor = ({ initialContent }: EditorProps) => {
       <Ruler />
       <div className="min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0 flex-col gap-5">
         <div
-          className="bg-white border print:border-0 border-[#C7C7C7] min-h-[1260px] max-h-[1260px] z-10"
+          className="bg-white border print:border-0 border-[#C7C7C7] min-h-[1280px] max-h-[1280px] z-10"
           onClick={onPageClick}
         >
           <div className="pt-10 print:pt-0">
@@ -198,7 +203,7 @@ export const Editor = ({ initialContent }: EditorProps) => {
         </div>
         {pages.map((_, index) => (
           <div
-            className="bg-white border print:border-0 border-[#C7C7C7] min-h-[1260px] max-h-[1260px] relative group z-0"
+            className="bg-white border print:border-0 border-[#C7C7C7] min-h-[1280px] max-h-[1280px] relative group z-0"
             onClick={onPageClick}
             key={index}
           >

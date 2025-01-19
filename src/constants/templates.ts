@@ -51,8 +51,7 @@ export const templates = [
 </ul>
 </li>
 </ol>
-<p></p>
-<div data-type="space" contenteditable="false" style="pointer-events: none;"></div>
+<div data-type="space" class='print:hidden' contenteditable="false" style="height: 180px; pointer-events: none;"></div>
 <h2 id="-ch-ancier">Échéancier</h2>
 <table>
 <thead>
@@ -178,6 +177,7 @@ export const templates = [
 <li>[Résumé des discussions ou décisions prises]</li>
 <li>[Problèmes ou questions soulevées]</li>
 </ul>
+<div data-type="space" class='print:hidden' contenteditable="false" style="height: 120px; pointer-events: none;"></div>
 <h3 id="point-3-sujet-">Point 3 : [Sujet]</h3>
 <ul>
 <li>[Résumé des discussions ou décisions prises]</li>
@@ -226,98 +226,11 @@ export const templates = [
     id: "rapport projet",
     label: "Rapport de Projet",
     imageUrl: "/letter.svg",
-    initialContent: `<h1 id="rapport-d-activit-mensuel">Rapport d’Activité Mensuel</h1>
-<h2 id="r-sum-">Résumé</h2>
-<ul>
-<li><strong>Période couverte :</strong> [Insérer la période, ex. janvier 2024]</li>
-<li><strong>Résumé général :</strong><ul>
-<li>[Brève description des principales activités réalisées].</li>
-<li>[Mise en avant des faits marquants].</li>
-</ul>
-</li>
-</ul>
-<h2 id="r-sultats-cl-s">Résultats Clés</h2>
-<ul>
-<li><strong>Objectifs atteints :</strong><ul>
-<li>[Objectif 1 et résultats associés].</li>
-<li>[Objectif 2 et résultats associés].</li>
-<li>[Objectif 3 et résultats associés].</li>
-</ul>
-</li>
-<li><strong>Indicateurs de performance (KPI) :</strong>
-| Indicateur            | Résultat      | Objectif fixé |
-|-----------------------|---------------|---------------|
-| [KPI 1]              | [Résultat]    | [Objectif]    |
-| [KPI 2]              | [Résultat]    | [Objectif]    |
-| [KPI 3]              | [Résultat]    | [Objectif]    |</li>
-</ul>
-<h2 id="d-fis-rencontr-s">Défis Rencontrés</h2>
-<ul>
-<li><p><strong>Défi 1 :</strong></p>
-<ul>
-<li>Description : [Description du défi].</li>
-<li>Impact : [Impact sur les résultats ou les projets].</li>
-<li>Solution apportée : [Solution mise en place ou envisagée].</li>
-</ul>
-</li>
-<li><p><strong>Défi 2 :</strong></p>
-<ul>
-<li>Description : [Description du défi].</li>
-<li>Impact : [Impact sur les résultats ou les projets].</li>
-<li>Solution apportée : [Solution mise en place ou envisagée].</li>
-</ul>
-</li>
-</ul>
-<h2 id="projets-en-cours">Projets en Cours</h2>
-<table>
-<thead>
-<tr>
-<th>Projet</th>
-<th>Avancement</th>
-<th>Responsable</th>
-<th>Prochaines étapes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>[Nom du projet 1]</td>
-<td>[Statut]</td>
-<td>[Nom/Équipe]</td>
-<td>[Étapes à venir]</td>
-</tr>
-<tr>
-<td>[Nom du projet 2]</td>
-<td>[Statut]</td>
-<td>[Nom/Équipe]</td>
-<td>[Étapes à venir]</td>
-</tr>
-<tr>
-<td>[Nom du projet 3]</td>
-<td>[Statut]</td>
-<td>[Nom/Équipe]</td>
-<td>[Étapes à venir]</td>
-</tr>
-</tbody>
-</table>
-<h2 id="prochaines-tapes">Prochaines Étapes</h2>
-<ul>
-<li><strong>Priorités pour le mois suivant :</strong><ul>
-<li>[Tâche ou objectif 1].</li>
-<li>[Tâche ou objectif 2].</li>
-<li>[Tâche ou objectif 3].</li>
-</ul>
-</li>
-<li><strong>Ressources nécessaires :</strong><ul>
-<li>[Description des besoins spécifiques].</li>
-</ul>
-</li>
-</ul>
-<h2 id="remarques-suppl-mentaires">Remarques Supplémentaires</h2>
-<ul>
-<li>[Ajout de tout autre commentaire ou information pertinente].</li>
-</ul>
-
-    `,
+    initialContent: `<h1 style="line-height: normal">Rapport d’Activité Mensuel</h1><h2 style="line-height: normal">Résumé</h2><ul class="tight" data-tight="true"><li><p style="line-height: normal"><strong>Période couverte :</strong> [Insérer la période, ex. janvier 2024]</p></li><li><p style="line-height: normal"><strong>Résumé général :</strong></p><ul class="tight" data-tight="true"><li><p style="line-height: normal">[Brève description des principales activités réalisées].</p></li><li><p style="line-height: normal">[Mise en avant des faits marquants].</p></li></ul></li></ul><h2 style="line-height: normal">Résultats Clés</h2><ul class="tight" data-tight="true"><li><p style="line-height: normal"><strong>Objectifs atteints :</strong></p><ul class="tight" data-tight="true"><li><p style="line-height: normal">[Objectif 1 et résultats associés].</p></li><li><p style="line-height: normal">[Objectif 2 et résultats associés].</p></li><li><p style="line-height: normal">[Objectif 3 et résultats associés].</p></li></ul></li><li><p style="line-height: normal"><strong>Indicateurs de performance (KPI) :</strong></p></li><li><p style="line-height: normal">Indicateur</p><table style="min-width: 75px"><colgroup><col style="min-width: 25px"><col style="min-width: 25px"><col style="min-width: 25px"></colgroup><tbody><tr><th colspan="1" rowspan="1"><p style="line-height: normal"></p></th><th colspan="1" rowspan="1"><p style="line-height: normal">Résultat</p></th><th colspan="1" rowspan="1"><p style="line-height: normal">Objectif fixé</p></th></tr><tr><td colspan="1" rowspan="1"><p style="line-height: normal">[KPI 1]</p></td><td colspan="1" rowspan="1"><p style="line-height: normal">[Résultat]</p></td><td colspan="1" rowspan="1"><p style="line-height: normal">[Objectif]</p></td></tr><tr><td colspan="1" rowspan="1"><p style="line-height: normal">[KPI 2]</p></td><td colspan="1" rowspan="1"><p style="line-height: normal">[Résultat]</p></td><td colspan="1" rowspan="1"><p style="line-height: normal">[Objectif]</p></td></tr><tr><td colspan="1" rowspan="1"><p style="line-height: normal">[KPI 3]</p></td><td colspan="1" rowspan="1"><p style="line-height: normal">[Résultat]</p></td><td colspan="1" rowspan="1"><p style="line-height: normal">[Objectif]</p></td></tr></tbody></table></li></ul><h2 style="line-height: normal">Défis Rencontrés</h2><ul><li><p style="line-height: normal"><strong>Défi 1 :</strong></p><ul class="tight" data-tight="true"><li><p style="line-height: normal">Description : [Description du défi].</p></li><li><p style="line-height: normal">Impact : [Impact sur les résultats ou les projets].</p></li><li><p style="line-height: normal">Solution apportée : [Solution mise en place ou envisagée].</p></li></ul></li></ul><p style="line-height: normal"></p><p style="line-height: normal"></p><p style="line-height: normal"></p><p style="line-height: normal"></p><p style="line-height: normal"></p><ul>
+    <div data-type="space"></div>
+    <li>
+    <p style="line-height: normal">
+    <strong>Défi 2 :</strong></p><ul class="tight" data-tight="true"><li><p style="line-height: normal">Description : [Description du défi].</p></li><li><p style="line-height: normal">Impact : [Impact sur les résultats ou les projets].</p></li><li><p style="line-height: normal">Solution apportée : [Solution mise en place ou envisagée].</p></li></ul></li></ul><h2 style="line-height: normal">Projets en Cours</h2><table style="min-width: 100px"><colgroup><col style="min-width: 25px"><col style="min-width: 25px"><col style="min-width: 25px"><col style="min-width: 25px"></colgroup><tbody><tr><th colspan="1" rowspan="1"><p style="line-height: normal">Projet</p></th><th colspan="1" rowspan="1"><p style="line-height: normal">Avancement</p></th><th colspan="1" rowspan="1"><p style="line-height: normal">Responsable</p></th><th colspan="1" rowspan="1"><p style="line-height: normal">Prochaines étapes</p></th></tr><tr><td colspan="1" rowspan="1"><p style="line-height: normal">[Nom du projet 1]</p></td><td colspan="1" rowspan="1"><p style="line-height: normal">[Statut]</p></td><td colspan="1" rowspan="1"><p style="line-height: normal">[Nom/Équipe]</p></td><td colspan="1" rowspan="1"><p style="line-height: normal">[Étapes à venir]</p></td></tr><tr><td colspan="1" rowspan="1"><p style="line-height: normal">[Nom du projet 2]</p></td><td colspan="1" rowspan="1"><p style="line-height: normal">[Statut]</p></td><td colspan="1" rowspan="1"><p style="line-height: normal">[Nom/Équipe]</p></td><td colspan="1" rowspan="1"><p style="line-height: normal">[Étapes à venir]</p></td></tr><tr><td colspan="1" rowspan="1"><p style="line-height: normal">[Nom du projet 3]</p></td><td colspan="1" rowspan="1"><p style="line-height: normal">[Statut]</p></td><td colspan="1" rowspan="1"><p style="line-height: normal">[Nom/Équipe]</p></td><td colspan="1" rowspan="1"><p style="line-height: normal">[Étapes à venir]</p></td></tr></tbody></table><h2 style="line-height: normal">Prochaines Étapes</h2><ul class="tight" data-tight="true"><li><p style="line-height: normal"><strong>Priorités pour le mois suivant :</strong></p><ul class="tight" data-tight="true"><li><p style="line-height: normal">[Tâche ou objectif 1].</p></li><li><p style="line-height: normal">[Tâche ou objectif 2].</p></li><li><p style="line-height: normal">[Tâche ou objectif 3].</p></li></ul></li><li><p style="line-height: normal"><strong>Ressources nécessaires :</strong></p><ul class="tight" data-tight="true"><li><p style="line-height: normal">[Description des besoins spécifiques].</p></li></ul></li></ul><h2 style="line-height: normal">Remarques Supplémentaires</h2><ul class="tight" data-tight="true"><li><p style="line-height: normal">[Ajout de tout autre commentaire ou information pertinente].</p></li></ul>`,
   },
   {
     id: "lettre motivation",

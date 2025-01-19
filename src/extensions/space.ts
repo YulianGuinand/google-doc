@@ -3,7 +3,7 @@ import { Node, mergeAttributes } from "@tiptap/core";
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {
     space: {
-      insertSpace: () => ReturnType;
+      insertSpace: (marge: number) => ReturnType;
     };
   }
 }
@@ -11,20 +11,19 @@ declare module "@tiptap/core" {
 export const SpaceNode = Node.create({
   name: "space",
 
-  group: "inline",
+  group: "block", // Le groupe "block" pour mieux gérer l'espacement vertical
 
-  inline: true,
-  // atom: true,
+  atom: true, // Comportement atomique
 
   addAttributes() {
     return {
       height: {
-        // parseHTML: (element) => element.style.height,
-        renderHTML: () => {
-          return {
-            class: `space`,
-          };
-        },
+        default: 100, // Hauteur par défaut
+        parseHTML: (element) => parseInt(element.style.height) || 100,
+        renderHTML: (attributes) => ({
+          style: `height: ${attributes.height}px;`,
+          class: "print:h-0",
+        }),
       },
     };
   },
@@ -40,7 +39,10 @@ export const SpaceNode = Node.create({
   renderHTML({ HTMLAttributes }) {
     return [
       "div",
-      mergeAttributes(HTMLAttributes, { "data-type": "space" }),
+      mergeAttributes(HTMLAttributes, {
+        "data-type": "space",
+        class: "print:hidden",
+      }),
       "",
     ];
   },
@@ -48,29 +50,32 @@ export const SpaceNode = Node.create({
   addCommands() {
     return {
       insertSpace:
-        () =>
+        (marge: number = 0) =>
         ({ commands }) => {
-          return commands.insertContent([
-            {
-              type: "paragraph",
+          // Calcule la hauteur dynamique en ajoutant la marge
+          const dynamicHeight = 100 + marge;
+
+          // Vérifie que la hauteur ne soit pas négative
+          const height = Math.max(dynamicHeight, 0);
+
+          return commands.insertContent({
+            type: this.name,
+            attrs: {
+              height,
             },
-            {
-              type: this.name,
-            },
-          ]);
+          });
         },
     };
   },
 
   addNodeView() {
-    return () => {
+    return ({ node }) => {
       const dom = document.createElement("div");
       dom.setAttribute("data-type", "space");
-      // dom.style.height = node.attrs.height;
+      dom.classList.add("print:hidden");
+      dom.style.height = `${node.attrs.height}px`;
       dom.style.pointerEvents = "none";
-      return {
-        dom,
-      };
+      return { dom };
     };
   },
 });
