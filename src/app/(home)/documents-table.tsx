@@ -55,7 +55,7 @@ export const DocumentsTable = ({
                   colSpan={4}
                   className="h-24 text-center text-muted-foreground"
                 >
-                  No documents
+                  No documents found
                 </TableCell>
               </TableRow>
             </TableBody>
