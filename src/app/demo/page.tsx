@@ -9,12 +9,14 @@ import { ReactLenis } from "@studio-freight/react-lenis";
 const BillingPage = () => {
   return (
     <ReactLenis root options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>
-      <main>
+      <main className="relative h-[310vh]">
         <NavBarDemo />
-        <div className="h-full bg-gradient-to-b from-primary/15 to-transparent">
+        <div className="bg-gradient-to-b from-primary/15 to-transparent z-0 sticky top-0">
           <DemoMain />
         </div>
-        <DemoHero />
+        <div className="z-10 relative">
+          <DemoHero />
+        </div>
       </main>
     </ReactLenis>
   );

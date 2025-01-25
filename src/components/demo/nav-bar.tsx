@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function NavBarDemo() {
   return (
-    <nav className="fixed top-0 left-0 backdrop-blur-xl w-full py-4 flex z-10">
+    <nav className="fixed top-0 left-0 backdrop-blur-xl w-full py-4 flex z-20">
       <div className="md:max-w-[60vw] w-[90vw] mx-auto flex justify-between items-center">
         <Link href="/" className="flex items-center gap-2">
           <Image src="/logo.svg" alt="logo svg" width={36} height={36} />
