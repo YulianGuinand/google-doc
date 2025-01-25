@@ -334,7 +334,6 @@ body {
 }
 
 div[data-type="space"] {
-  background-color: red;
 }
 
 @media print {
