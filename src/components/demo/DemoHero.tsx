@@ -1,8 +1,9 @@
 "use client";
-import React, { useEffect, useRef } from "react";
-import { useScroll, motion, MotionValue, useTransform } from "framer-motion";
+import { motion, MotionValue, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
+import { useRef } from "react";
 import { Card } from "../ui/card";
+import DemoLive from "./Live/DemoLive";
 
 export default function DemoHero() {
   const values =
@@ -50,7 +51,9 @@ export default function DemoHero() {
           })}
         </p>
       </div>
-      <div className="h-screen w-full bg-white"></div>
+      <div className="h-[100vh] w-full bg-white pt-[68px]">
+        <DemoLive />
+      </div>
     </div>
   );
 }
