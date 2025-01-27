@@ -96,6 +96,7 @@
     "sonner": "^1.7.0",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
+    "three": "^0.172.0",
     "tiptap-extension-resize-image": "^1.2.1",
     "tiptap-markdown": "^0.8.10",
     "vaul": "^1.1.1",
