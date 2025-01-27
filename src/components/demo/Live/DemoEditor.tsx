@@ -62,7 +62,7 @@ const DemoEditor = () => {
       attributes: {
         style: `padding-left: 56px; padding-right: 56px;`,
         class:
-          "focus:outline-none print:border-0 flex flex-col w-[816px] pr-14 cursor-text bg-white pt-10 print:pt-0 pb-10 print:pb-0 border print:border-0 border-[#C7C7C7] z-10",
+          "focus:outline-none print:border-0 flex flex-col w-full max-w-[816px] pr-14 cursor-text pt-10 print:pt-0 pb-10 print:pb-0 z-10",
       },
       handleKeyDown(view, event) {
         if (event.key === "Enter" && nbLine >= 600) {
@@ -130,8 +130,10 @@ const DemoEditor = () => {
   });
 
   return (
-    <div className="min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0 flex-col gap-5">
-      <EditorContent editor={editor} />
+    <div className="min-w-max flex justify-center w-full max-w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0 flex-col gap-5">
+      <div className="min-h-[600px] bg-white border print:border-0 border-[#C7C7C7]">
+        <EditorContent editor={editor} />
+      </div>
     </div>
   );
 };

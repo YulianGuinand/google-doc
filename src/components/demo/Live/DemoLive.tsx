@@ -36,7 +36,7 @@ const DemoLive = () => {
         .insertContent({
           type: "codeBlock",
           attrs: { language: "javascript" },
-          content: [{ type: "text", text: "const text = 'text';" }],
+          content: [{ type: "text", text: value }],
         })
         .run();
 
