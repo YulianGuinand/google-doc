@@ -369,3 +369,14 @@ div[data-type="space"] {
 div[data-radix-popper-content-wrapper] {
   z-index: 50 !important;
 }
+
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

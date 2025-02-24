@@ -1,7 +1,7 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import { Button } from "../ui/button";
 import { ChevronsRightIcon } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { Button } from "../ui/button";
 
 export default function DemoMain() {
   const mouseFollow = useRef<HTMLDivElement>(null);
@@ -52,8 +52,7 @@ export default function DemoMain() {
             Save time & money on AWS
           </h1>
           <p className="text-center md:text-xl max-w-[400px] text-sm">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima,
-            eius.
+            Créez des documents, insérez du code et partagez-les instantanément.
           </p>
           <Button
             className="px-9 flex items-center justify-center"
