@@ -1,5 +1,6 @@
 "use client";
 
+import { DemoFooter } from "@/components/demo/DemoFooter";
 import DemoHero from "@/components/demo/DemoHero";
 import DemoMain from "@/components/demo/DemoMain";
 import { CobeDraggableAuto } from "@/components/demo/eldora/cobeglobeautodraggable";
@@ -147,6 +148,10 @@ const BillingPage = () => {
           <div className="z-10">
             <PricingSection />
           </div>
+        </div>
+
+        <div className="relative min-h-screen w-full bg-white overflow-hidden">
+          <DemoFooter />
         </div>
       </main>
     </ReactLenis>

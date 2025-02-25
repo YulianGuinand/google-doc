@@ -37,7 +37,7 @@ export function CobeDraggableAuto() {
       mapBrightness: 1.2,
       baseColor: [1, 1, 1],
       markerColor: [251 / 255, 100 / 255, 21 / 255],
-      glowColor: [0.5, 0.5, 0.5],
+      glowColor: [0.9765, 0.7608, 0.9569],
       markers: [],
       onRender: (state) => {
         // This prevents rotation while dragging

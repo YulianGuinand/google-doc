@@ -110,10 +110,12 @@
     "zustand": "^5.0.1"
   },
   "devDependencies": {
+    "@types/animejs": "^3.1.13",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-color": "^3.0.12",
     "@types/react-dom": "^18",
+    "animejs": "^3.2.2",
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
     "postcss": "^8",

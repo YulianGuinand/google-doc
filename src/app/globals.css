@@ -370,8 +370,6 @@ div[data-radix-popper-content-wrapper] {
   z-index: 50 !important;
 }
 
-
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -379,4 +377,14 @@ div[data-radix-popper-content-wrapper] {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.background {
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    180deg,
+    rgba(2, 0, 36, 0) 0%,
+    rgba(255, 255, 255, 1) 48%,
+    rgba(255, 255, 255, 1) 100%
+  );
 }

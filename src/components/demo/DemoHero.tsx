@@ -18,7 +18,7 @@ export default function DemoHero() {
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <div className="h-screen w-full flex items-center justify-center bg-gradient-to-b from-transparent to-white">
+      <div className="h-screen w-full flex items-center justify-center background">
         <div className="border border-primary/10 p-3 mt-10 rounded-2xl">
           <div className="border border-primary/20 border-b-0 px-1.5 pt-1.5 rounded-xl bg-primary/20">
             <Card className="overflow-hidden">
