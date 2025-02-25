@@ -32,7 +32,6 @@ export const DemoFooter = () => {
     );
 
     const items = gsap.utils.toArray(".footer__item");
-    console.log(items);
 
     gsap.fromTo(
       items,
