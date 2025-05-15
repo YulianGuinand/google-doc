@@ -25,6 +25,7 @@ export async function getUsers() {
       user.primaryEmailAddress?.emailAddress ??
       "Migrant sans papier",
     avatar: user.imageUrl,
+    color: "",
   }));
 
   return users;
